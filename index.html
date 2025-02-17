@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Sylvia</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #happy-birthday {
+            font-size: 3em;
+            color: #ff69b4;
+            animation: blink 1s infinite;
+            visibility: hidden;
+        }
+        @keyframes blink {
+            50% { visibility: hidden; }
+        }
+        #countdown-timer {
+            font-size: 5em;
+            color: #ff4500;
+        }
+
+        .firework {
+            position: absolute;
+            border-radius: 50%;
+            animation: explode 1.5s ease-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+
+        /* 控制烟花的颜色变化 */
+        .firework1 { background-color: red; }
+        .firework2 { background-color: green; }
+        .firework3 { background-color: yellow; }
+        .firework4 { background-color: blue; }
+        .firework5 { background-color: purple; }
+    </style>
+</head>
+<body>
+    <div id="countdown">
+        <h2 id="countdown-timer">5</h2>
+    </div>
+    <h1 id="happy-birthday">Happy Birthday Sylvia</h1>
+    <div id="fireworks-container"></div>
+
+    <script>
+        let countdown = 5;
+        let countdownElement = document.getElementById('countdown-timer');
+        let birthdayElement = document.getElementById('happy-birthday');
+        let fireworksContainer = document.getElementById('fireworks-container');
+        let isFireworksLaunched = false;
+
+        // 倒计时
+        let countdownInterval = setInterval(() => {
+            countdownElement.textContent = countdown;
+            countdown--;
+            if (countdown < 0) {
+                clearInterval(countdownInterval);
+                birthdayElement.style.visibility = 'visible';
+                let utterance = new SpeechSynthesisUtterance('Happy Birthday Sylvia');
+                speechSynthesis.speak(utterance);
+
+                // 等待5秒播放完音频后启动烟花
+                setTimeout(() => {
+                    launchFireworks();
+                    setTimeout(() => {
+                        displayQuote();
+                    }, 10000); // 延迟10秒后显示名言
+                }, 5000); // 等待音频播放完再开始烟花
+            }
+        }, 1000);
+
+        // 启动烟花
+        function launchFireworks() {
+            isFireworksLaunched = true;
+            for (let i = 0; i < 10; i++) {  // 控制烟花数量
+                let firework = document.createElement('div');
+                let randomX = Math.random() * window.innerWidth;
+                let randomY = Math.random() * window.innerHeight;
+                let randomFirework = 'firework' + (Math.floor(Math.random() * 5) + 1);
+                firework.classList.add('firework', randomFirework);
+                firework.style.left = randomX + 'px';
+                firework.style.top = randomY + 'px';
+                fireworksContainer.appendChild(firework);
+                setTimeout(() => {
+                    firework.style.animation = 'explode 1.5s ease-out forwards';
+                }, 100);
+            }
+
+            // 丰富烟花颜色，展示视觉效果
+            setTimeout(() => {
+                for (let i = 0; i < fireworksContainer.children.length; i++) {
+                    let firework = fireworksContainer.children[i];
+                    firework.style.animation = 'explode 1.5s ease-out infinite';
+                    firework.style.animationDuration = '1s';
+                }
+            }, 8000); // 八秒后让烟花颜色丰富起来
+        }
+
+        // 显示马尔克斯的名言
+        function displayQuote() {
+            let quoteElement = document.createElement('p');
+            quoteElement.textContent = '"What matters in life is not what happens to you but what you remember and how you remember it." — Gabriel García Márquez';
+            quoteElement.style.visibility = 'visible';
+            document.body.appendChild(quoteElement);
+            let utterance = new SpeechSynthesisUtterance('Here is a quote from One Hundred Years of Solitude');
+            speechSynthesis.speak(utterance);
+        }
+    </script>
+</body>
+</html>
