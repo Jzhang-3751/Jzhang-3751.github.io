@@ -105,23 +105,22 @@
 
         function renderMaze() {
             const mazeElement = document.getElementById('maze');
-            mazeElement.innerHTML = '';
+            mazeElement.innerHTML = ''; // Clear previous maze
             for (let y = 0; y < mazeSize; y++) {
                 for (let x = 0; x < mazeSize; x++) {
                     const cell = document.createElement('div');
                     cell.classList.add('cell');
                     if (maze[y][x] === 'wall') {
                         cell.classList.add('wall');
-                    }
-                    if (maze[y][x] === 'player') {
-                        cell.classList.add('player');
-                    }
-                    if (maze[y][x] === 'goal') {
+                    } else if (maze[y][x] === 'goal') {
                         cell.classList.add('goal');
                     }
                     mazeElement.appendChild(cell);
                 }
             }
+            // Render the player (this ensures the player is always on top)
+            const playerCell = mazeElement.children[playerPos.y * mazeSize + playerPos.x];
+            playerCell.classList.add('player');
         }
 
         function movePlayer(dx, dy) {
@@ -129,12 +128,12 @@
             const newX = playerPos.x + dx;
             const newY = playerPos.y + dy;
             if (newX >= 0 && newY >= 0 && newX < mazeSize && newY < mazeSize && maze[newY][newX] !== 'wall') {
-                maze[playerPos.y][playerPos.x] = 'path';
+                maze[playerPos.y][playerPos.x] = 'path'; // Reset old player position
                 playerPos.x = newX;
                 playerPos.y = newY;
-                maze[playerPos.y][playerPos.x] = 'player';
-                renderMaze();
-                checkGoal();
+                maze[playerPos.y][playerPos.x] = 'player'; // Update new player position
+                renderMaze(); // Re-render the maze
+                checkGoal(); // Check if the player reached the goal
             }
         }
 
