@@ -17,8 +17,8 @@
         }
         #maze {
             display: grid;
-            grid-template-columns: repeat(24, 20px);
-            grid-template-rows: repeat(24, 20px);
+            grid-template-columns: repeat(30, 20px);
+            grid-template-rows: repeat(30, 20px);
             gap: 1px;
             margin-bottom: 20px; /* Add margin so buttons don't overlap maze */
         }
@@ -84,7 +84,7 @@
     </div>
 
     <script>
-        const mazeSize = 24; // Updated to 24x24 grid size
+        const mazeSize = 30;
         const maze = [];
         let playerPos = { x: 1, y: 1 };
         let goalPos = { x: mazeSize - 2, y: mazeSize - 2 };
@@ -94,8 +94,8 @@
             for (let i = 0; i < mazeSize; i++) {
                 maze[i] = [];
                 for (let j = 0; j < mazeSize; j++) {
-                    // Further reduce the number of walls
-                    maze[i][j] = Math.random() > 0.8 ? 'wall' : 'path'; // Adjusted probability to reduce walls
+                    // Decrease the chance of walls to 20%
+                    maze[i][j] = Math.random() > 0.8 ? 'wall' : 'path'; // Adjusted probability for fewer walls (20%)
                 }
             }
             maze[0][0] = 'path'; // Start
